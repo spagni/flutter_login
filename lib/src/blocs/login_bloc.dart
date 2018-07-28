@@ -1,18 +1,38 @@
-import 'dart:async';
-import 'dart:convert';
-import 'package:http/http.dart' show Client;
-import '../../models/login_parameter.dart';
-import '../../models/login_response.dart';
+import 'dart:io';
+import 'package:rxdart/rxdart.dart';
+import '../resources/auth_api_provider.dart';
+import '../models/login_parameter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginBloc {
-  Client _httpClient = new Client();
+  final AuthApiProvider api = AuthApiProvider();
 
-  Future<LogInResponse> _logIn(LogInParameter parameter) async {
-    final response = await _httpClient.post('http://oficina.kimn.com.ar:21000/CautusNew/UserManager.svc/SignIn',body: parameter);
-    final jsonResponse = json.decode(response.body);
-    
-    return LogInResponse.fromJson(jsonResponse);
+  final PublishSubject<bool> _isAuthenticated = PublishSubject<bool>();
+  final PublishSubject<LogInParameter> _logInUser = PublishSubject<LogInParameter>();
+
+  Observable<bool> get isAuthenticated => _isAuthenticated.stream;
+  Function(LogInParameter) get logInUser => _logInUser.sink.add;
+
+  LoginBloc() {
+    //Escucho eventos que llegan al stream. Se ejecuta cuando se agrega algo al sink desde UI
+    _logInUser.stream.listen(_handleLogin);
   }
 
-  //Future<bool> 
+  void _handleLogin(LogInParameter parameter) async {
+    var response = await api.logIn(parameter);
+    final SharedPreferences _prefs = await SharedPreferences.getInstance();
+
+    if (response.code == HttpStatus.OK) {
+      _isAuthenticated.sink.add(true);
+      _prefs.setString('Token', response.responseObject.token);
+    }
+    else {
+    _isAuthenticated.sink.add(false);
+    }
+  }
+
+  dispose() {
+    _isAuthenticated.close();
+    _logInUser.close();
+  }
 }

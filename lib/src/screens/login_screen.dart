@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import '../blocs/login_bloc_provider.dart';
+import '../models/login_parameter.dart';
+import './home_screen.dart';
+
 class LoginScreen extends StatefulWidget {
   @override
   _LoginScreenState createState() => _LoginScreenState();
@@ -6,9 +10,32 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   bool isLoading = false;
+  //Esta MAL!! Hay que usar InheritedWidget
+  LoginBloc bloc = LoginBloc();
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
 
   @override
+    void initState() {
+      bloc.isAuthenticated.listen((bool value) {
+        setState(() {
+          //Paro el activity indicator
+          isLoading = false;
+        });
+        print('IS LOGGED $value');
+        if (value) {
+          Navigator.push(context, MaterialPageRoute(
+            builder: (BuildContext context) => HomeScreen()
+          ));
+        }
+      });
+      super.initState();
+    }
+  
+  @override
   Widget build(BuildContext context) {
+    //bloc = LoginBlocProvider.of(context);
+
     return Scaffold(
       body: Stack(
         fit: StackFit.expand,
@@ -28,9 +55,9 @@ class _LoginScreenState extends State<LoginScreen> {
         children: <Widget>[
           Icon(Icons.alternate_email, size: 250.0, color: Colors.white70),
           SizedBox(height: 12.0),
-          _buildInput('Email', false),
+          _buildInput('Email', false, _emailController),
           SizedBox(height: 12.0),
-          _buildInput('Password', true),
+          _buildInput('Password', true, _passwordController),
           SizedBox(height: 12.0),
           _buildButtonBar()
         ],
@@ -38,10 +65,11 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  Widget _buildInput(String label, bool obscure) {
+  Widget _buildInput(String label, bool obscure, TextEditingController controller) {
     return Theme(
       data: ThemeData.dark().copyWith(accentColor: Colors.white),
       child: TextField(
+        controller: controller,
         obscureText: obscure,
         decoration: InputDecoration(
           contentPadding: EdgeInsets.all(16.0),
@@ -84,10 +112,13 @@ class _LoginScreenState extends State<LoginScreen> {
           shape: StadiumBorder(),
           child: Text('LOG IN', style: TextStyle(color: Colors.white)),
           elevation: 5.0,
-          color: Colors.indigo,
+          color: Colors.indigo[600],
           onPressed: () {
+            bloc.logInUser(_buildLoginParameter());
             setState(() {
               isLoading = !isLoading;
+              _emailController.clear();
+              _passwordController.clear();
             });
           },
         ),
@@ -101,5 +132,17 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
       );
     }
+  }
+
+  LogInParameter _buildLoginParameter() {
+    //TODO: Bussines logic no deberia ir aca
+    return LogInParameter(email: _emailController.text, password: _passwordController.text);
+  }
+
+  void dispose() {
+    // Clean up the controller when the Widget is disposed
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
   }
 }
