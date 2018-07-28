@@ -27,7 +27,7 @@ class App extends StatelessWidget {
     final token = prefs.getString('Token');
 
     if (token != null) {
-      return LoginScreen();
+      return HomeScreen();
     }
     else {
       return LoginScreen();
