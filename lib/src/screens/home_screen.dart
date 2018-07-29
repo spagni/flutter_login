@@ -20,8 +20,8 @@ class HomeScreen extends StatelessWidget {
   void _onPressed(BuildContext context) async {
     SharedPreferences _prefs = await SharedPreferences.getInstance();
     _prefs.clear();
-    Navigator.push(context, MaterialPageRoute(
+    Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
       builder: (BuildContext context) => LoginScreen()
-    ));
+    ), (Route<dynamic> route) => false);
   }
 }

@@ -11,27 +11,30 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   bool isLoading = false;
   //Esta MAL!! Hay que usar InheritedWidget
-  LoginBloc bloc = LoginBloc();
+  LoginBloc bloc; //= LoginBloc();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  @override
+  // TODO: implement context
+  BuildContext get context => super.context;
 
   @override
-    void initState() {
-      bloc.isAuthenticated.listen((bool value) {
-        setState(() {
-          //Paro el activity indicator
-          isLoading = false;
-        });
-        print('IS LOGGED $value');
-        if (value) {
-          Navigator.push(context, MaterialPageRoute(
-            builder: (BuildContext context) => HomeScreen()
-          ));
-        }
+  void didChangeDependencies() {
+    bloc = LoginBlocProvider.of(context);
+    bloc.isAuthenticated.listen((bool value) {
+      setState(() {
+        //Paro el activity indicator
+        isLoading = false;
       });
-      super.initState();
-    }
-  
+      print('IS LOGGED $value');
+      if (value) {
+        Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(
+          builder: (BuildContext context) => HomeScreen()
+        ), (Route<dynamic> route) => false);
+      }
+    });
+    super.didChangeDependencies();
+  }
   @override
   Widget build(BuildContext context) {
     //bloc = LoginBlocProvider.of(context);
