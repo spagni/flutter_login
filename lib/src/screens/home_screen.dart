@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'login_screen.dart';
+import '../utils/shared_preferences.dart';
 
 class HomeScreen extends StatelessWidget {
   @override
@@ -18,8 +18,7 @@ class HomeScreen extends StatelessWidget {
   }
 
   void _onPressed(BuildContext context) async {
-    SharedPreferences _prefs = await SharedPreferences.getInstance();
-    _prefs.clear();
+    await Preferences.clearValues();
     Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
       builder: (BuildContext context) => LoginScreen()
     ), (Route<dynamic> route) => false);
