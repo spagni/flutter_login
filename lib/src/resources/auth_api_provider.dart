@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:http/http.dart' show Client;
 import '../models/login_parameter.dart';
 import '../models/login_response.dart';
-import '../models/dataContracts/base_response.dart';
+import '../models/dataContracts/base_parameter.dart';
 
 class AuthApiProvider {
   Client _httpClient = new Client();
@@ -20,7 +20,7 @@ class AuthApiProvider {
   }
 
   Future<bool> verifyToken(String token) async {
-    LogInResponse _body = LogInResponse(token: token);
+    BaseParameter _body = BaseParameter(token: token);
     final response = await _httpClient.post('${_serverUri}VerifyUserToken',body: json.encode(_body.toMap()), headers: {HttpHeaders.CONTENT_TYPE: 'application/json'});
     final jsonResponse = json.decode(response.body);
     return jsonResponse['ResponseObject'];

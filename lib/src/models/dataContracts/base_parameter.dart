@@ -1,5 +1,17 @@
+import 'package:json_annotation/json_annotation.dart';
+
 class BaseParameter<T> {
-  int code;
-  String message;
-  T requestObject;
+  @JsonKey(name: 'Token')
+  String token;
+  @JsonKey(name: 'Language')
+  String language = 'en';
+
+  BaseParameter({this.token, this.language});
+
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'Token': this.token,
+      'Language': this.language
+    };
+  }
 }
