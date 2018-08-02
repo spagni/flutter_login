@@ -28,7 +28,7 @@ class LoginBloc {
 
     if (response.code == HttpStatus.OK) {
       _isAuthenticated.sink.add(true);
-      await Preferences.setStringValue('Token', response.responseObject.token);
+      await Preferences.setStringValue('Token', response.token);
     }
     else {
       _isAuthenticated.sink.add(false);

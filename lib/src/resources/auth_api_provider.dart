@@ -10,13 +10,13 @@ class AuthApiProvider {
   Client _httpClient = new Client();
   final String _serverUri = 'http://oficina.kimn.com.ar:21000/CautusNew/UserManager.svc/';
 
-  Future<BaseResponse> logIn(LogInParameter parameter) async {
+  Future<LogInResponse> logIn(LogInParameter parameter) async {
     final response = await _httpClient.post('${_serverUri}SignIn',
                                             body: json.encode(parameter.toMap()),
                                             headers: {HttpHeaders.CONTENT_TYPE: 'application/json'});
     final jsonResponse = json.decode(response.body);
     
-    return BaseResponse.fromJson(jsonResponse);
+    return LogInResponse.fromJson(jsonResponse);
   }
 
   Future<bool> verifyToken(String token) async {
