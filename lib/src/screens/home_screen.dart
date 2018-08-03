@@ -3,6 +3,7 @@ import 'login_screen.dart';
 import '../utils/shared_preferences.dart';
 import '../blocs/products_bloc_provider.dart';
 import '../models/catalog_detail_response.dart';
+import '../widgets/product_card.dart';
 
 class HomeScreen extends StatelessWidget {
   @override
@@ -30,15 +31,11 @@ class HomeScreen extends StatelessWidget {
         }
         var productsList = snapshot.data;
         return RefreshIndicator(
-          child: ListView.builder(
-            itemCount: productsList.length,
-            itemBuilder: (BuildContext context, int index) {
-              return ListTile(
-                contentPadding: EdgeInsets.all(16.0),
-                title: Text(productsList[index].name),
-                trailing: Text('\$${productsList[index].price}')
-              );
-            },
+          child: GridView.count(
+            crossAxisCount: 2,
+            padding: EdgeInsets.all(16.0),
+            childAspectRatio: 8.0 / 9.0,
+            children: _buildList(productsList),
           ),
           onRefresh: () async {
             await bloc.handleGetCatalog(null);
@@ -46,6 +43,12 @@ class HomeScreen extends StatelessWidget {
         );
       },
     );
+  }
+
+  List<ProductCard> _buildList(List<CatalogDetailResponse> productsList) {
+    return productsList.map((product) {
+      return ProductCard(product: product);
+    }).toList();
   }
 
   void _onPressed(BuildContext context) async {

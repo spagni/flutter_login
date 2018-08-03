@@ -10,6 +10,7 @@ dependencies:
   cupertino_icons: ^0.1.2
   rxdart: ^0.18.1
   http: ^0.11.3+16
+  intl: ^0.15.7
   shared_preferences: ^0.4.2
   json_annotation: ^0.2.9
 
@@ -35,6 +36,14 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/images/background.png
+    - assets/images/CT_RISK_BIKE.png
+    - assets/images/CT_RISK_CAR.png
+    - assets/images/CT_RISK_HEALTH.png
+    - assets/images/CT_RISK_HOME.png
+    - assets/images/CT_RISK_LIFE.png
+    - assets/images/CT_RISK_MOBILE.png
+    - assets/images/CT_RISK_PET.png
+    - assets/images/CT_RISK_TRAVEL.png
   #  - images/a_dot_burr.jpeg
   #  - images/a_dot_ham.jpeg
 
