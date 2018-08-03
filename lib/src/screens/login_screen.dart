@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../blocs/login_bloc_provider.dart';
+import '../blocs/products_bloc_provider.dart';
 import '../models/login_parameter.dart';
 import './home_screen.dart';
 
@@ -12,24 +13,29 @@ class _LoginScreenState extends State<LoginScreen> {
   bool isLoading = false;
   //Esta MAL!! Hay que usar InheritedWidget
   LoginBloc bloc; //= LoginBloc();
+  ProductsBloc productsBloc;
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   @override
-  // TODO: implement context
   BuildContext get context => super.context;
 
   @override
   void didChangeDependencies() {
     bloc = LoginBlocProvider.of(context);
+    productsBloc = ProductsBlocProvider.of(context);
     bloc.isAuthenticated.listen((bool value) {
       setState(() {
         //Paro el activity indicator
         isLoading = false;
       });
-      print('IS LOGGED $value');
       if (value) {
         Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(
-          builder: (BuildContext context) => HomeScreen()
+          builder: (BuildContext context) {
+            //Recupero los productos y navego a Home
+            //productsBloc.getCatalog(null);
+            //Lo terminé haciendo en el streamBuilder de home
+            return HomeScreen();
+          }
         ), (Route<dynamic> route) => false);
       }
     });
