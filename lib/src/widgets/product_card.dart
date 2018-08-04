@@ -18,7 +18,7 @@ class ProductCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           AspectRatio(
-            aspectRatio: 18.0/11.0,
+            aspectRatio: 18.0/10.0,
             child: Image.asset('assets/images/${product.riskCode}.png', fit: BoxFit.fill)
           ),
           Divider(height: 1.0, indent: 20.0,),
@@ -31,7 +31,7 @@ class ProductCard extends StatelessWidget {
                 children: <Widget>[
                   Text(
                     product.name, 
-                    style: theme.textTheme.title,
+                    style: theme.textTheme.subhead.copyWith(fontWeight: FontWeight.bold),
                     softWrap: true,
                     textAlign: TextAlign.center,
                     //overflow: TextOverflow.ellipsis,

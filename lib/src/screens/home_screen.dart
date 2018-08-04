@@ -11,7 +11,15 @@ class HomeScreen extends StatelessWidget {
     ProductsBloc _bloc = ProductsBlocProvider.of(context);
     return Scaffold(
       appBar: AppBar(
+        leading: Icon(Icons.menu),
         title: Text('Cautus'),
+        actions: <Widget>[
+          Icon(Icons.search),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16.0),
+            child: Icon(Icons.send),
+          )
+        ],
       ),
       body: _buildProductsList(_bloc),
       floatingActionButton: FloatingActionButton(
@@ -30,16 +38,27 @@ class HomeScreen extends StatelessWidget {
           return Center(child: CircularProgressIndicator());
         }
         var productsList = snapshot.data;
-        return RefreshIndicator(
-          child: GridView.count(
-            crossAxisCount: 2,
-            padding: EdgeInsets.all(16.0),
-            childAspectRatio: 8.0 / 9.0,
-            children: _buildList(productsList),
+        return Container(
+          height: 210.0,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Padding(
+                padding: EdgeInsets.fromLTRB(19.0, 16.0,16.0,4.0),
+                child: Text('Select a product', textAlign: TextAlign.left, style: Theme.of(context).textTheme.subhead),
+              ),
+              Expanded(
+                child: GridView.count(
+                  scrollDirection: Axis.horizontal,
+                  crossAxisCount: 1,
+                  mainAxisSpacing: 2.0,
+                  padding: EdgeInsets.symmetric(horizontal: 16.0),
+                  childAspectRatio: 6.0 /5.0,
+                  children: _buildList(productsList),
+                ),
+              )
+            ],
           ),
-          onRefresh: () async {
-            await bloc.handleGetCatalog(null);
-          },
         );
       },
     );

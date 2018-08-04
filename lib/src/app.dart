@@ -14,7 +14,7 @@ class App extends StatelessWidget {
         child: MaterialApp(
           title: 'Cautus',
           theme: ThemeData(
-            primarySwatch: Colors.red
+            primarySwatch: Colors.indigo
           ),
           home: Home(),
         ),
