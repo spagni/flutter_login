@@ -1,28 +1,22 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
-import 'package:http/http.dart' show Client;
 import '../models/login_parameter.dart';
 import '../models/login_response.dart';
 import '../models/dataContracts/base_parameter.dart';
+import '../utils/http_requests_helper.dart';
 
 class AuthApiProvider {
-  Client _httpClient = new Client();
   final String _serverUri = 'http://oficina.kimn.com.ar:21000/CautusNew/UserManager.svc/';
 
   Future<LogInResponse> logIn(LogInParameter parameter) async {
-    final response = await _httpClient.post('${_serverUri}SignIn',
-                                            body: json.encode(parameter.toMap()),
-                                            headers: {HttpHeaders.CONTENT_TYPE: 'application/json'});
-    final jsonResponse = json.decode(response.body);
+    final response = await HttpRequest.postAsync('${_serverUri}SignIn', json.encode(parameter.toMap()));
     
-    return LogInResponse.fromJson(jsonResponse);
+    return LogInResponse.fromJson(response);
   }
 
   Future<bool> verifyToken(String token) async {
     BaseParameter _body = BaseParameter(token: token);
-    final response = await _httpClient.post('${_serverUri}VerifyUserToken',body: json.encode(_body.toMap()), headers: {HttpHeaders.CONTENT_TYPE: 'application/json'});
-    final jsonResponse = json.decode(response.body);
-    return jsonResponse['ResponseObject'];
+    final response = await HttpRequest.postAsync('${_serverUri}VerifyUserToken', json.encode(_body.toMap()));
+    return response['ResponseObject'];
   }
 }
