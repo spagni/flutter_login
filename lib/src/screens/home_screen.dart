@@ -37,7 +37,7 @@ class HomeScreenState extends State<HomeScreen> {
       child: Scaffold(
         appBar: AppBar(
           leading: Padding(
-            padding: EdgeInsets.all(3.0),
+            padding: EdgeInsets.all(4.0),
             child: CircleAvatar(
               backgroundImage: NetworkImage('https://instagram.faep9-2.fna.fbcdn.net/vp/05e7b834967dadd1fb44e52bd3d2934f/5C0C9A16/t51.2885-19/s320x320/30084914_231763700899045_353564606909644800_n.jpg'),
               radius: 20.0,

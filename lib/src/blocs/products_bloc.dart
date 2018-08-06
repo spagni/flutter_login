@@ -18,7 +18,7 @@ class ProductsBloc {
   }
 
   //_ porque listen() si o si requiere un parametro de entrada
-  //Lo hago publico para poder llamarlo desde onRefresh, que necesita que se devuelva un Future
+  ///Lo hago publico para poder llamarlo desde onRefresh, que necesita que se devuelva un Future
   Future<void> handleGetCatalog(_) async {
     final response = await api.getProducts();
 
