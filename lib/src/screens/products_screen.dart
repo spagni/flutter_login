@@ -19,11 +19,11 @@ class ProductsScreen extends StatelessWidget {
         return RefreshIndicator(
           child: ListView(
             children: <Widget>[
-              /*ProductsScrollList(
+              ProductsScrollList(
                 icon: Icon(Icons.cloud_queue, color: Colors.lime),
                 title: 'Top Sellers',
                 productsList: productsList,
-              ),*/
+              ),
               ProductsScrollList(
                 icon: Icon(Icons.airplanemode_active, color: Colors.green),
                 title: 'Travel',
