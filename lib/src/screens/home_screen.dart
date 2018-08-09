@@ -10,15 +10,18 @@ class HomeScreen extends StatefulWidget {
   HomeScreenState createState() => new HomeScreenState();
 }
 
-class HomeScreenState extends State<HomeScreen> {
+class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMixin{
   int _currentIndex = 0;
   Widget _currentScreen;
-  List<Widget> _screens = <Widget>[
-    
-  ];
+  List<Widget> _screens;
+  //Animations
+  AnimationController _slideController;
+  Animation<Offset> _slideRightAnimation;
 
   @override
     void initState() {
+      super.initState();
+
       _screens = <Widget>[
         ProductsScreen(),
         Container(color: Colors.red,),
@@ -27,7 +30,14 @@ class HomeScreenState extends State<HomeScreen> {
         Container(color: Colors.indigo,),
       ];
       _currentScreen = _screens[0];
-      super.initState();
+
+      _slideController = AnimationController(
+        duration: Duration(milliseconds: 100),
+        vsync: this
+      );
+      _slideRightAnimation = Tween<Offset>(begin: Offset(-1.0, 0.0), end: Offset(0.0, 0.0))
+        .animate(_slideController);
+      _slideController.forward();
     }
 
   @override
@@ -52,7 +62,10 @@ class HomeScreenState extends State<HomeScreen> {
             )
           ],
         ),
-        body: _currentScreen,
+        body: SlideTransition(
+          position: _slideRightAnimation,
+          child: _currentScreen
+        ),
         bottomNavigationBar: _buildBottomNavBar(),
         floatingActionButton: FloatingActionButton(
           child: Icon(Icons.exit_to_app),
@@ -74,6 +87,14 @@ class HomeScreenState extends State<HomeScreen> {
       _currentIndex = index;
       _currentScreen = _screens[index];
     });
+    
+    if (_slideRightAnimation.status == AnimationStatus.completed) {
+      _slideController.reset();
+      _slideController.forward();
+    }
+    else {
+      _slideController.forward();
+    }
   }
 
   Widget _buildBottomNavBar() {

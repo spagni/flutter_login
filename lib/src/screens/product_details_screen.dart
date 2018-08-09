@@ -116,7 +116,17 @@ class ProductDetailsScreenState extends State<ProductDetailsScreen> with TickerP
         },
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return SimpleDialog(
+                title: Text('Button Pressed: Ofrecer Producto'),
+                titlePadding: EdgeInsets.all(24.0),
+              );
+            }
+          );
+        },
         child: Icon(Icons.add),
       ),
     );
@@ -175,18 +185,23 @@ class ProductDetailsScreenState extends State<ProductDetailsScreen> with TickerP
                 children: <Widget>[
                   Padding(
                     padding: const EdgeInsets.only(right: 8.0),
-                    child: Icon(Icons.check, size: 20.0, color: Theme.of(context).accentColor,),
+                    child: Icon(Icons.check, size: 20.0, color: Theme.of(context).accentColor),
                   ),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        Text(
-                          i.name, 
-                          style: TextStyle(
-                            fontSize: 17.0,
-                            fontWeight: FontWeight.w400
-                          )
+                        Row(
+                          children: <Widget>[
+                            Text(
+                              i.name, 
+                              style: TextStyle(
+                                fontSize: 17.0,
+                                fontWeight: FontWeight.w400
+                              )
+                            ),
+                            Icon(Icons.arrow_drop_down, size: 20.0, color: Theme.of(context).accentColor)
+                          ],
                         ),
                         _buildDetailRow(i)
                       ],
