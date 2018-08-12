@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'login_screen.dart';
 import '../utils/shared_preferences.dart';
 import '../screens/products_screen.dart';
+import '../screens/profile_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   
@@ -27,7 +28,7 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
         Container(color: Colors.red,),
         Container(color: Colors.lightBlue,),
         Container(color: Colors.lime,),
-        Container(color: Colors.indigo,),
+        ProfileScreen()
       ];
       _currentScreen = _screens[0];
 

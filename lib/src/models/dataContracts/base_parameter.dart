@@ -8,7 +8,7 @@ class BaseParameter<T> {
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'Token': this.token,
-      'Language': this.language,
+      'Language': this.language?? 'en',
       'RequestObject': this.requestObject
     };
   }
