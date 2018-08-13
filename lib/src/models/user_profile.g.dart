@@ -10,7 +10,7 @@ UserProfile _$UserProfileFromJson(Map<String, dynamic> json) {
   return new UserProfile(
       id: json['Id'] as int,
       email: json['Email'] as String,
-      fistName: json['firstName'] as String,
+      firstName: json['FirstName'] as String,
       gender: json['Gender'] as String,
       genderCode: json['GenderCode'] as String,
       languageCode: json['languageCode'] as String,
@@ -18,14 +18,14 @@ UserProfile _$UserProfileFromJson(Map<String, dynamic> json) {
       phone: json['Phone'] == null
           ? null
           : new Phone.fromJson(json['Phone'] as Map<String, dynamic>),
-      profilePhoto:
-          (json['ProfilePhoto'] as List)?.map((e) => e as int)?.toList());
+      profilePhoto: Uint8List.fromList(
+          (json['ProfilePhoto'].cast<int>())));
 }
 
 abstract class _$UserProfileSerializerMixin {
   int get id;
   String get email;
-  String get fistName;
+  String get firstName;
   String get lastName;
   String get languageCode;
   String get gender;
@@ -35,7 +35,7 @@ abstract class _$UserProfileSerializerMixin {
   Map<String, dynamic> toJson() => <String, dynamic>{
         'Id': id,
         'Email': email,
-        'firstName': fistName,
+        'FirstName': firstName,
         'LastName': lastName,
         'languageCode': languageCode,
         'Gender': gender,

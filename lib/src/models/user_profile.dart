@@ -10,8 +10,8 @@ class UserProfile extends Object with _$UserProfileSerializerMixin{
   int id;
   @JsonKey(name: 'Email')
   String email;
-  @JsonKey(name: 'firstName')
-  String fistName;
+  @JsonKey(name: 'FirstName')
+  String firstName;
   @JsonKey(name: 'LastName')
   String lastName;
   @JsonKey(name: 'languageCode')
@@ -27,7 +27,7 @@ class UserProfile extends Object with _$UserProfileSerializerMixin{
   @JsonKey(name: 'ProfilePhoto')
   Uint8List profilePhoto;
 
-  UserProfile({this.id, this.birthDate, this.email, this.fistName, this.gender, this.genderCode,
+  UserProfile({this.id, this.birthDate, this.email, this.firstName, this.gender, this.genderCode,
               this.languageCode, this.lastName, this.phone, this.profilePhoto});
 
   factory UserProfile.fromJson(Map<String, dynamic> json) => _$UserProfileFromJson(json);

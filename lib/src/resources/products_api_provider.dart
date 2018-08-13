@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
+import 'dart:io' as dartIo;
 import '../utils/shared_preferences.dart';
 import '../models/dataContracts/base_parameter.dart';
 import '../models/catalog_response.dart';
@@ -23,7 +23,7 @@ class ProductApiProvider {
     final response = await HttpRequest.postAsync('${_serverUri}GetProductDetail', _body);
 
     //NO USO BASERESPONSE Y VALIDO EL CODIGO ACA
-    if (response['Code'] == HttpStatus.OK) {
+    if (response['Code'] == dartIo.HttpStatus.OK) {
       return ProductDetail.fromJson(response['ResponseObject']);
     }
     return null;

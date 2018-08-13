@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
+import 'dart:io' as dartIo;
 import '../utils/shared_preferences.dart';
 import '../models/user_profile.dart';
 import '../models/dataContracts/base_parameter.dart';
@@ -13,7 +13,7 @@ class UserApiProvider {
     BaseParameter _parameter = BaseParameter(token: await Preferences.getStringValue('Token'));
     final response = await HttpRequest.postAsync('${_serverUri}GetUserProfile', json.encode(_parameter.toMap()));
     
-    if (response['Code'] == HttpStatus.OK) {
+    if (response['Code'] == dartIo.HttpStatus.OK) {
       return UserProfile.fromJson(response['ResponseObject']);
     }
     return null;

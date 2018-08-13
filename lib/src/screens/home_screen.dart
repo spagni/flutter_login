@@ -4,6 +4,7 @@ import 'login_screen.dart';
 import '../utils/shared_preferences.dart';
 import '../screens/products_screen.dart';
 import '../screens/profile_screen.dart';
+import '../screens/notifications_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   
@@ -27,7 +28,7 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
         ProductsScreen(),
         Container(color: Colors.red,),
         Container(color: Colors.lightBlue,),
-        Container(color: Colors.lime,),
+        NotificationsScreen(),
         ProfileScreen()
       ];
       _currentScreen = _screens[0];
@@ -46,32 +47,13 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
     return WillPopScope(
       onWillPop: _onWillPop,
       child: Scaffold(
-        appBar: AppBar(
-          leading: Padding(
-            padding: EdgeInsets.all(4.0),
-            child: CircleAvatar(
-              backgroundImage: NetworkImage('https://instagram.faep9-2.fna.fbcdn.net/vp/05e7b834967dadd1fb44e52bd3d2934f/5C0C9A16/t51.2885-19/s320x320/30084914_231763700899045_353564606909644800_n.jpg'),
-              radius: 20.0,
-            ),
-          ),
-          title: Text('Cautus'),
-          actions: <Widget>[
-            Icon(Icons.search),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16.0),
-              child: Icon(Icons.send),
-            )
-          ],
-        ),
+        appBar: _buildAppbar(),
         body: SlideTransition(
           position: _slideRightAnimation,
           child: _currentScreen
         ),
         bottomNavigationBar: _buildBottomNavBar(),
-        floatingActionButton: FloatingActionButton(
-          child: Icon(Icons.exit_to_app),
-          onPressed: () => _onPressed(context),
-        ),
+        floatingActionButton: _buildFAB()
       ),
     );
   }
@@ -84,6 +66,8 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
   }
 
   void _navigate(int index) {
+    if (index == _currentIndex) return;
+
     setState(() {
       _currentIndex = index;
       _currentScreen = _screens[index];
@@ -98,6 +82,42 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
     }
   }
 
+  //Estos metodos los uso para que cada screen pueda tener su propio appbar y FAB
+  //Si no es la screen 0, dejo que cada pantalla construya lo suyo.
+  //Esto es así para poder mantener bottom nav bar con toda su logica de navegacion
+  //Material design no incluye todo este diseño
+  Widget _buildAppbar() {
+    if (_currentIndex == 0) {
+        return AppBar(
+        leading: Padding(
+          padding: EdgeInsets.all(5.0),
+          child: CircleAvatar(
+            backgroundImage: NetworkImage('https://instagram.faep9-2.fna.fbcdn.net/vp/05e7b834967dadd1fb44e52bd3d2934f/5C0C9A16/t51.2885-19/s320x320/30084914_231763700899045_353564606909644800_n.jpg'),
+            radius: 20.0,
+          ),
+        ),
+        title: Text('Cautus'),
+        actions: <Widget>[
+          Icon(Icons.search),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16.0),
+            child: Icon(Icons.send),
+          )
+        ],
+      );
+    }
+    return null;    
+  }
+  Widget _buildFAB() {
+    if (_currentIndex == 0) {
+      return FloatingActionButton(
+        child: Icon(Icons.exit_to_app),
+        onPressed: () => _onPressed(context),
+      );
+    }
+    return null;
+  }
+  
   Widget _buildBottomNavBar() {
     return BottomNavigationBar(
       currentIndex: _currentIndex,
