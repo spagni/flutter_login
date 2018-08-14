@@ -1,7 +1,8 @@
-import 'dart:ui' as dartUi;
 import 'package:flutter/material.dart';
 import '../blocs/user_bloc_provider.dart';
 import '../models/user_profile.dart';
+import '../widgets/profile_img_stack.dart';
+import '../widgets/info_tile.dart';
 
 class ProfileScreen extends StatefulWidget {
   @override
@@ -14,6 +15,7 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
 
   //AvatarScale Animation
   AnimationController _avatarController;
+  Animation<double> _avatarAnimation;
 
   @override
   void initState() {
@@ -24,6 +26,17 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
     _avatarController = AnimationController(
       duration: Duration(milliseconds: 700),
       vsync: this
+    );
+
+    _avatarAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(
+        parent: _avatarController,
+        curve: Interval(
+          0.100,
+          0.900,
+          curve: Curves.elasticOut,
+        )
+      )
     );
   }
 
@@ -81,6 +94,22 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
         SliverList(
           delegate: SliverChildListDelegate(
             <Widget>[
+              Row(
+                children: <Widget>[
+                  Expanded(child: InfoTile(title: 'First Name', subtitle: user.firstName, icon: Icons.person_outline,)),
+                  Expanded(child: InfoTile(title: 'Last Name', subtitle: user.lastName)),
+                ],
+              ),
+              _divider,
+              InfoTile(title: 'Email', subtitle: user.email, icon: Icons.alternate_email),
+              _divider,
+              InfoTile(title: 'Birth Date', subtitle: user.birthDate.toString(), icon: Icons.today),
+              _divider,
+              InfoTile(title: 'Mobile Phone', subtitle: user.phone.number.toString(), icon: Icons.phone_iphone),
+              _divider,
+              InfoTile(title: 'Gender', subtitle: user.gender, icon: Icons.face),
+              _divider,
+              InfoTile(title: 'CBU', subtitle: '123456789', icon: Icons.work),
               Container(color: Colors.lime, height: 150.0),
               Container(color: Colors.lightBlue, height: 150.0),
               Container(color: Colors.orange, height: 150.0),
@@ -94,90 +123,19 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
     );
   }
 
+  Widget get _divider => Padding(
+    padding: EdgeInsets.symmetric(horizontal: 24.0),
+    child: Container(color: Colors.black45, height: 0.5),
+  );
+
   Widget _buildImagesStack(UserProfile user) {
     _avatarController.forward();
-    return Container(
-      //height: _stackHeight,
-      width: double.infinity, 
-      child: Stack(
-        children: <Widget>[
-          //Pongo la img de fondo en el decoration de un container para poder aplicarle el blur
-          Container(
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: MemoryImage(
-                  user.profilePhoto,
-                ),
-                fit: BoxFit.cover
-              )
-            ),
-            child: BackdropFilter(
-              filter: dartUi.ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
-              //Para que se vea la imagen de atras con opacity
-              child: new Container(
-                decoration: new BoxDecoration(color: Colors.black.withOpacity(0.4))
-              ),
-            )
-          ),
-          Positioned(
-            //Width de la pantalla sobre dos, menos el radio del avatar para que quede en el centro
-            left: MediaQuery.of(context).size.width / 2 - 70.0,
-            top: 30.0,
-            child: ScaleTransition(
-              scale: Tween<double>(begin: 0.0, end: 1.0).animate(
-                CurvedAnimation(
-                  parent: _avatarController,
-                  curve: Interval(
-                    0.100,
-                    0.900,
-                    curve: Curves.elasticOut,
-                  )
-                )
-              ),
-              child: CircleAvatar(
-                backgroundImage: MemoryImage(user.profilePhoto),
-                radius: 70.0,
-                //Child para agregar el borde de color
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(70.0),
-                    border: Border.all(
-                      color: Theme.of(context).accentColor,
-                      width: 3.0
-                    )
-                  ),
-                ),
-              ),
-            )
-          ),
-          Positioned(
-            bottom: 50.0,
-            left: 0.0,
-            right: 0.0,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                Text(
-                  '${user.firstName} ${user.lastName}',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Theme.of(context).canvasColor,
-                    fontSize: 23.0
-                  ),
-                ),
-                Text(
-                  '${user.email}',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Theme.of(context).canvasColor,
-                    fontSize: 15.0
-                  ),
-                )
-              ],
-            ),
-          )
-        ],
-      ),
-    );
+    //Extraigo la logica del stack en un nuevo widget reutilizable
+    return ProfileImgStack(
+      animation: _avatarAnimation,
+      title: '${user.firstName} ${user.lastName}',
+      subtitle: '${user.email}',
+      image: MemoryImage(user.profilePhoto),
+    );    
   }
 }
